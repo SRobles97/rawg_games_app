@@ -19,6 +19,7 @@ class _HomeScreenState extends ConsumerState<VideogamesScreen> {
   late Future<void> _videogamesFuture;
   final _scrollController = ScrollController();
   bool _isGrid = true;
+  bool _isAscending = true;
 
   @override
   void initState() {
@@ -50,6 +51,22 @@ class _HomeScreenState extends ConsumerState<VideogamesScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isAscending = !_isAscending;
+                              ref
+                                  .read(videogamesProvider.notifier)
+                                  .filterByRating(_isAscending);
+                            });
+                          },
+                          icon: Icon(Platform.isAndroid
+                              ? _isAscending
+                                  ? Icons.arrow_upward
+                                  : Icons.arrow_downward
+                              : _isAscending
+                                  ? CupertinoIcons.arrow_up
+                                  : CupertinoIcons.arrow_down)),
                       IconButton(
                         onPressed: () {
                           setState(() {

@@ -16,6 +16,16 @@ Future _initVideogames(int page) async {
   return loadedVideogames;
 }
 
+Future _filterByRating(bool isAscending) async {
+  final response = await http.get(Uri.parse(
+      'https://api.rawg.io/api/games?key=${dotenv.env['API_KEY']}&ordering=${isAscending ? 'rating' : '-rating'}'));
+  final extractedData = json.decode(response.body) as Map<String, dynamic>;
+  final List<Videogame> loadedVideogames = extractedData['results']
+      .map<Videogame>((gameData) => Videogame.fromJson(gameData))
+      .toList();
+  return loadedVideogames;
+}
+
 class VideogamesNotifier extends StateNotifier<List<Videogame>> {
   VideogamesNotifier() : super([]);
 
@@ -37,6 +47,17 @@ class VideogamesNotifier extends StateNotifier<List<Videogame>> {
     } finally {
       _isFetching = false;
     }
+  }
+
+  Future<void> filterByRating(bool isAscending) async {
+    final newVideogames = await _filterByRating(isAscending);
+    state = newVideogames;
+  }
+
+  Future<void> refreshVideogames() async {
+    _currentPage = 1;
+    state = [];
+    await loadVideogames();
   }
 }
 

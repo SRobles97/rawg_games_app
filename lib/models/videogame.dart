@@ -20,9 +20,9 @@ class Videogame {
     return Videogame(
       id: json['id'],
       title: fixedName(json['name']),
-      releaseDate: json['released'],
-      imageUrl: json['background_image'],
-      rating: json['rating'].toDouble(),
+      releaseDate: json['released'] ?? 'N/A',
+      imageUrl: json['background_image'] ?? '',
+      rating: json['rating'].toDouble() ?? 0.0,
     );
   }
 }

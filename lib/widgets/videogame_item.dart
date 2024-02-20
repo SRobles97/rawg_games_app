@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -13,20 +16,20 @@ class VideogameItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
 
-    Widget image = FadeInImage(
-        placeholder: MemoryImage(kTransparentImage),
-        image: NetworkImage(videogame.imageUrl),
-        fit: BoxFit.cover,
-        width: isGrid
-            ? double.infinity
-            : width > 600
-                ? 400
-                : 150,
-        height: isGrid
-            ? double.infinity
-            : width > 600
-                ? 300
-                : 200);
+    Widget image() {
+      return videogame.imageUrl.isNotEmpty
+          ? FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: videogame.imageUrl,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: isGrid ? 200 : 100,
+            )
+          : Icon(
+              Platform.isIOS ? CupertinoIcons.photo : Icons.photo,
+              size: isGrid ? 200 : 100,
+            );
+    }
 
     Widget buildRowOfStars(double rating) {
       int totalStars = 5;
@@ -73,7 +76,7 @@ class VideogameItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
             child: Stack(
               children: [
-                image,
+                image(),
                 Positioned(
                     top: 0,
                     right: 0,
@@ -124,7 +127,11 @@ class VideogameItem extends StatelessWidget {
         : Card(
             child: Row(
             children: <Widget>[
-              image,
+              SizedBox(
+                width: width > 600 ? 400 : 150,
+                  height: width > 600 ? 300 : 200,
+                child: image(),
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(

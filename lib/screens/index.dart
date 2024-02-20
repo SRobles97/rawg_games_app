@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:games_app/screens/videogames.dart';
 
@@ -12,9 +15,9 @@ class _IndexScreenState extends State<IndexScreen> {
   int _selectedIndex = 0;
 
   final _pages = [
-    Text('Home'),
+    const Text('Home'),
     const VideogamesScreen(),
-    Text('Profile'),
+    const Text('Profile'),
   ];
 
   @override
@@ -25,7 +28,8 @@ class _IndexScreenState extends State<IndexScreen> {
           actions: [
             IconButton(
               onPressed: null, // TODO: Implement search
-              icon: const Icon(Icons.search),
+              icon: Icon(
+                  Platform.isAndroid ? Icons.search : CupertinoIcons.search),
             ),
           ],
         ),
