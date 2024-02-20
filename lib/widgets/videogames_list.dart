@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:games_app/widgets/videogame_item.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/videogame.dart';
@@ -17,52 +18,7 @@ class VideogameList extends StatelessWidget {
       controller: scrollController,
       key: const PageStorageKey('videogames_list'),
       itemBuilder: (context, index) {
-        return Card(
-            child: Row(
-          children: <Widget>[
-            FadeInImage(
-                placeholder: MemoryImage(kTransparentImage),
-                image: NetworkImage(videogames[index].imageUrl),
-                fit: BoxFit.cover,
-                width: width > 600 ? 400 : 150,
-                height: width > 600 ? 300 : 200),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: width > 600
-                    ? CrossAxisAlignment.center
-                    : CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    videogames[index].title,
-                    style: TextStyle(
-                      fontSize: width > 600 ? 23 : 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Release Date: ${videogames[index].releaseDate}',
-                    style: TextStyle(
-                      fontSize: width > 600 ? 18 : 14,
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        '${videogames[index].rating}',
-                        style: TextStyle(
-                          fontSize: width > 600 ? 18 : 14,
-                        ),
-                      ),
-                      const Icon(Icons.star, color: Colors.amber),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
-        ));
+        return VideogameItem(videogame: videogames[index], isGrid: false);
       },
       itemCount: videogames.length,
     );
