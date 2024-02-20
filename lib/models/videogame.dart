@@ -13,9 +13,13 @@ class Videogame {
       required this.rating});
 
   factory Videogame.fromJson(Map<String, dynamic> json) {
+    String fixedName(String name) {
+      return name.replaceAll(RegExp(r'[^a-zA-Z0-9\s]'), '');
+    }
+
     return Videogame(
       id: json['id'],
-      title: json['name'],
+      title: fixedName(json['name']),
       releaseDate: json['released'],
       imageUrl: json['background_image'],
       rating: json['rating'].toDouble(),

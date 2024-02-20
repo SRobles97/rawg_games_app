@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:games_app/widgets/videogame_item.dart';
 
 import '../models/videogame.dart';
 
@@ -6,53 +7,27 @@ class VideogameGrid extends StatelessWidget {
   final List<Videogame> videogames;
   final ScrollController scrollController;
 
-  const VideogameGrid(
-      {super.key, required this.videogames, required this.scrollController});
+  const VideogameGrid({
+    super.key,
+    required this.videogames,
+    required this.scrollController,
+  });
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return GridView.builder(
+        key: const PageStorageKey('videogames_grid'),
         controller: scrollController,
         padding: const EdgeInsets.all(8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: width > 600 ? 4 : 2,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
         ),
         itemCount: videogames.length,
         itemBuilder: (context, index) {
-          final videogame = videogames[index];
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Stack(
-              children: [
-                Image.network(
-                  videogame.imageUrl,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    color: Colors.black.withOpacity(0.5),
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      videogame.title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
+          return VideogameItem(videogame: videogames[index]);
         });
   }
 }
