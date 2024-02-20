@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../models/videogame.dart';
 
-class VideogameList extends StatelessWidget {
+class VideogameGrid extends StatelessWidget {
   final List<Videogame> videogames;
+  final ScrollController scrollController;
 
-  const VideogameList({super.key, required this.videogames});
+  const VideogameGrid(
+      {super.key, required this.videogames, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+        controller: scrollController,
         padding: const EdgeInsets.all(8),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

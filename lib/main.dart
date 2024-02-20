@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:games_app/screens/home.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-  runApp(const GamesApp());
+  runApp(const ProviderScope(child: GamesApp()));
 }
 
 class GamesApp extends StatelessWidget {
