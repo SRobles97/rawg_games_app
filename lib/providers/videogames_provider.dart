@@ -21,8 +21,16 @@ class VideogamesNotifier extends StateNotifier<List<Videogame>> {
 
   int _currentPage = 1;
   bool _isFetching = false;
-  List<Videogame> _allVideogames =
-      []; // Almacenará todos los videojuegos cargados
+  List<Videogame> _allVideogames = [];
+  List<Videogame> _topRatedGames = [];
+  List<Videogame> _topMetacriticGames = [];
+  List<Videogame> _recentGames = [];
+
+  List<Videogame> get topRatedGames => _topRatedGames;
+
+  List<Videogame> get topMetacriticGames => _topMetacriticGames;
+
+  List<Videogame> get recentGames => _recentGames;
 
   bool get isFetching => _isFetching;
 
@@ -34,8 +42,8 @@ class VideogamesNotifier extends StateNotifier<List<Videogame>> {
     _isFetching = true;
     try {
       final newVideogames = await _initVideogames(_currentPage);
-      _allVideogames = [..._allVideogames, ...newVideogames]; // Almacenar todos los videojuegos
-      state = [...state, ...newVideogames]; // Solo añade nuevos videojuegos al estado existente
+      _allVideogames = [..._allVideogames, ...newVideogames];
+      _updateSpecialLists();
       _currentPage++;
     } catch (error) {
       if (kDebugMode) {
@@ -44,8 +52,27 @@ class VideogamesNotifier extends StateNotifier<List<Videogame>> {
     } finally {
       _isFetching = false;
     }
+    state = _allVideogames;
   }
 
+  void _updateSpecialLists() {
+    // Actualizar los 5 juegos mejor valorados por rating
+    _topRatedGames = [..._allVideogames]
+      ..sort((a, b) => b.rating.compareTo(a.rating));
+    _topRatedGames = _topRatedGames.take(5).toList();
+
+    // Actualizar los 5 juegos mejor valorados por metacritic
+    var metacriticGames = _allVideogames
+        .where((game) => game.metacritic != null)
+        .toList()
+      ..sort((a, b) => b.metacritic!.compareTo(a.metacritic!));
+    _topMetacriticGames = metacriticGames.take(5).toList();
+
+    // Actualizar los juegos más recientes por fecha de lanzamiento
+    _recentGames = [..._allVideogames]
+      ..sort((a, b) => b.releaseDate.compareTo(a.releaseDate));
+    _recentGames = _recentGames.take(5).toList();
+  }
 
   void filterByRating(bool isAscending) {
     // Filtra y ordena la lista de todos los videojuegos cargados

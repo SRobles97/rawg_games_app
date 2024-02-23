@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:games_app/screens/home.dart';
 import 'package:games_app/screens/videogames.dart';
 
 class IndexScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _IndexScreenState extends State<IndexScreen> {
   int _selectedIndex = 0;
 
   final _pages = [
-    const Text('Home'),
+    const HomeScreen(),
     const VideogamesScreen(),
     const Text('Profile'),
   ];
@@ -24,7 +25,7 @@ class _IndexScreenState extends State<IndexScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Videogames'),
+          title: const Text('RAWG.IO Videogame List'),
           actions: [
             IconButton(
               onPressed: null, // TODO: Implement search
@@ -53,8 +54,8 @@ class _IndexScreenState extends State<IndexScreen> {
               label: 'Videogames',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
+              icon: Icon(Icons.favorite_border),
+              label: 'Favorites',
             ),
           ],
         ));
