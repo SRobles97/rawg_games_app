@@ -8,6 +8,7 @@ class MetaScoreWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 40,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: metascore >= 60
@@ -18,11 +19,12 @@ class MetaScoreWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
+        textAlign: TextAlign.center,
         metascore.toString(),
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
       ),
     );
   }

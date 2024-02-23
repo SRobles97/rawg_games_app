@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:games_app/widgets/metascore.dart';
+import 'package:games_app/widgets/stars_row.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/videogame.dart';
@@ -33,47 +35,6 @@ class VideogameItem extends StatelessWidget {
                 size: isGrid ? 200 : 100,
               ),
       );
-    }
-
-    Widget buildRowOfStars(double rating) {
-      int totalStars = 5;
-      List<Widget> stars = List.generate(
-          totalStars,
-          (index) => const Icon(
-                Icons.star_outline,
-                color: Colors.amber,
-                size: 16,
-              ));
-
-      int fullStars = rating.floor();
-      for (int i = 0; i < fullStars; i++) {
-        stars[i] = const Icon(
-          Icons.star,
-          color: Colors.amber,
-          size: 16,
-        );
-      }
-
-      double decimalPart = rating - fullStars;
-      if (decimalPart >= 0.75) {
-        if (fullStars < totalStars) {
-          stars[fullStars] = const Icon(
-            Icons.star,
-            color: Colors.amber,
-            size: 16,
-          );
-        }
-      } else if (decimalPart >= 0.25) {
-        if (fullStars < totalStars) {
-          stars[fullStars] = const Icon(
-            Icons.star_half,
-            color: Colors.amber,
-            size: 16,
-          );
-        }
-      }
-
-      return Row(mainAxisSize: MainAxisSize.min, children: stars);
     }
 
     return InkWell(
@@ -131,6 +92,10 @@ class VideogameItem extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Positioned(
+                      top: 0,
+                      left: 0,
+                      child: MetaScoreWidget(metascore: videogame.metacritic))
                 ],
               ),
             )
@@ -169,7 +134,7 @@ class VideogameItem extends StatelessWidget {
                               fontSize: width > 600 ? 18 : 14,
                             ),
                           ),
-                          buildRowOfStars(videogame.rating),
+                          StarsRowWidget(rating: videogame.rating),
                         ],
                       )
                     ],

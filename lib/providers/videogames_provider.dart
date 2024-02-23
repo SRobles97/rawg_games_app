@@ -63,9 +63,9 @@ class VideogamesNotifier extends StateNotifier<List<Videogame>> {
 
     // Actualizar los 5 juegos mejor valorados por metacritic
     var metacriticGames = _allVideogames
-        .where((game) => game.metacritic != null)
+        .where((game) => game.metacritic > 0)
         .toList()
-      ..sort((a, b) => b.metacritic!.compareTo(a.metacritic!));
+      ..sort((a, b) => b.metacritic.compareTo(a.metacritic));
     _topMetacriticGames = metacriticGames.take(5).toList();
 
     // Actualizar los juegos más recientes por fecha de lanzamiento
@@ -75,13 +75,19 @@ class VideogamesNotifier extends StateNotifier<List<Videogame>> {
   }
 
   void filterByRating(bool isAscending) {
-    // Filtra y ordena la lista de todos los videojuegos cargados
     List<Videogame> sortedVideogames = List.from(_allVideogames);
     sortedVideogames.sort((a, b) => isAscending
         ? a.rating.compareTo(b.rating)
         : b.rating.compareTo(a.rating));
-    state =
-        sortedVideogames; // Actualizar la vista actual con los videojuegos filtrados y ordenados
+    state = sortedVideogames;
+  }
+
+  void filterByMetacritic(bool isAscending) {
+    List<Videogame> sortedVideogames = List.from(_allVideogames);
+    sortedVideogames.sort((a, b) => isAscending
+        ? a.metacritic.compareTo(b.metacritic)
+        : b.metacritic.compareTo(a.metacritic));
+    state = sortedVideogames;
   }
 
   Future<void> refreshVideogames() async {

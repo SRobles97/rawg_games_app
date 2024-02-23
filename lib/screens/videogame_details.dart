@@ -1,4 +1,12 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:games_app/screens/image.dart';
+import 'package:games_app/widgets/metascore.dart';
+
+import 'package:games_app/widgets/stars_row.dart';
 
 import '../models/videogame.dart';
 
@@ -16,14 +24,24 @@ class VideogameDetails extends StatelessWidget {
             top: 0,
             left: 0,
             right: 0,
-            child: Hero(
-                tag: videogame.id,
-                child: Image.network(
-                  videogame.imageUrl,
-                  width: double.infinity,
-                  height: 350,
-                  fit: BoxFit.cover,
-                )),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ImageScreen(
+                    imageUrl: videogame.imageUrl,
+                    videogameId: videogame.id,
+                  ),
+                ));
+              },
+              child: Hero(
+                  tag: videogame.id,
+                  child: Image.network(
+                    videogame.imageUrl,
+                    width: double.infinity,
+                    height: 350,
+                    fit: BoxFit.cover,
+                  )),
+            ),
           ),
           Positioned(
             top: 0,
@@ -31,25 +49,23 @@ class VideogameDetails extends StatelessWidget {
             right: 0,
             child: AppBar(
               iconTheme:
-                  IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+                  IconThemeData(color: Theme.of(context).colorScheme.secondary),
               backgroundColor: Colors.transparent,
               elevation: 0,
               actions: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
+                IconButton(
+                  icon: Icon(
+                    Platform.isIOS
+                        ? CupertinoIcons.heart
+                        : Icons.favorite_border,
                   ),
-                  child: IconButton(
-                    icon: const Icon(Icons.favorite_border),
-                    onPressed: () {},
-                  ),
+                  onPressed: () {},
                 ),
               ],
             ),
           ),
           Positioned(
-            top: kToolbarHeight + MediaQuery.of(context).padding.top + 170,
+            top: kToolbarHeight + MediaQuery.of(context).padding.top + 160,
             left: 0,
             right: 0,
             bottom: 5,
@@ -58,7 +74,7 @@ class VideogameDetails extends StatelessWidget {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(4),
                       child: Column(
                         children: <Widget>[
                           Container(
@@ -66,11 +82,12 @@ class VideogameDetails extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Theme.of(context)
                                   .colorScheme
-                                  .primaryContainer,
+                                  .background
+                                  .withOpacity(0.75),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(12.0),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -78,61 +95,77 @@ class VideogameDetails extends StatelessWidget {
                                       videogame.title,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyLarge!
+                                          .titleLarge!
                                           .copyWith(
                                             fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                           ),
                                     ),
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        videogame.rating.toString(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      const Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                    ],
-                                  ),
+                                  StarsRowWidget(rating: videogame.rating),
                                 ],
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
                           Card(
+                            color:
+                                Theme.of(context).appBarTheme.foregroundColor,
+                            surfaceTintColor:
+                                Theme.of(context).colorScheme.secondary,
+                            margin: const EdgeInsets.all(8),
                             child: Padding(
                               padding: const EdgeInsets.all(16),
                               child: Column(
                                 children: [
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      const Icon(Icons.calendar_today),
-                                      const SizedBox(width: 8),
-                                      Text(videogame.releaseDate),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.timer),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                          videogame.averagePlaytime.toString()),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.star),
-                                      const SizedBox(width: 8),
-                                      Text(videogame.metacritic.toString()),
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            textAlign: TextAlign.start,
+                                            "${AppLocalizations.of(context)!.release_date}:",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Platform.isIOS
+                                                    ? CupertinoIcons.calendar
+                                                    : Icons.calendar_today,
+                                                color: Theme.of(context)
+                                                    .appBarTheme
+                                                    .backgroundColor,
+                                                size: 36,
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Text(videogame.releaseDate),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            textAlign: TextAlign.start,
+                                            "${AppLocalizations.of(context)!.metacritic}:",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                          MetaScoreWidget(
+                                              metascore: videogame.metacritic),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ],

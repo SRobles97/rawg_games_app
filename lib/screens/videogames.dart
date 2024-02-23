@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:games_app/widgets/videogames_grid.dart';
 import 'package:games_app/widgets/videogames_list.dart';
 import '../providers/videogames_provider.dart';
@@ -18,6 +19,7 @@ class _HomeScreenState extends ConsumerState<VideogamesScreen> {
   final _scrollController = ScrollController();
   bool _isGrid = true;
   bool _isAscending = true;
+  bool _isMetaAscending = true;
 
   @override
   void initState() {
@@ -42,7 +44,28 @@ class _HomeScreenState extends ConsumerState<VideogamesScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                IconButton(
+                TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        _isMetaAscending = !_isMetaAscending;
+                        ref
+                            .read(videogamesProvider.notifier)
+                            .filterByMetacritic(_isMetaAscending);
+                      });
+                    },
+                    icon: Icon(
+                      Platform.isAndroid
+                          ? _isMetaAscending
+                              ? Icons.arrow_downward
+                              : Icons.arrow_upward
+                          : _isMetaAscending
+                              ? CupertinoIcons.chevron_down
+                              : CupertinoIcons.chevron_up,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    label: Text(AppLocalizations.of(context)!.metacritic)),
+                TextButton.icon(
+                    label: Text(AppLocalizations.of(context)!.filter_by_rating),
                     onPressed: () {
                       setState(() {
                         _isAscending = !_isAscending;
@@ -53,11 +76,11 @@ class _HomeScreenState extends ConsumerState<VideogamesScreen> {
                     },
                     icon: Icon(Platform.isAndroid
                         ? _isAscending
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward
+                            ? Icons.arrow_downward
+                            : Icons.arrow_upward
                         : _isAscending
-                            ? CupertinoIcons.arrow_up
-                            : CupertinoIcons.arrow_down)),
+                            ? CupertinoIcons.chevron_down
+                            : CupertinoIcons.chevron_up)),
                 IconButton(
                   onPressed: () {
                     setState(() {

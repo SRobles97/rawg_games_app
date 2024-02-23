@@ -7,5 +7,8 @@
   "home": "Inicio",
   "games": "Juegos",
   "favorites": "Favoritos",
-  "search": "Buscar"
+  "search": "Buscar",
+  "release_date": "Fecha de lanzamiento",
+  "metacritic": "Nota en Metacritic",
+  "filter_by_rating": "Valoración"
 }

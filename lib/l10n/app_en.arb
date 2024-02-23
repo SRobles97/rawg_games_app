@@ -10,5 +10,8 @@
   "search": "Search",
   "home": "Home",
   "games": "Videogames",
-  "favorites": "Favorites"
+  "favorites": "Favorites",
+  "release_date": "Release date",
+  "metacritic": "Metacritic Score",
+  "filter_by_rating": "Rating"
 }
