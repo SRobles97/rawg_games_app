@@ -13,5 +13,6 @@
   "favorites": "Favorites",
   "release_date": "Release date",
   "metacritic": "Metacritic Score",
-  "filter_by_rating": "Rating"
+  "filter_by_rating": "Rating",
+  "rawg": "Data provided by Rawg.io"
 }

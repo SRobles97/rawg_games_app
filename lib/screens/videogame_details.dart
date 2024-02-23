@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:games_app/screens/image.dart';
 import 'package:games_app/widgets/metascore.dart';
 
 import 'package:games_app/widgets/stars_row.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/videogame.dart';
 
@@ -167,6 +169,45 @@ class VideogameDetails extends StatelessWidget {
                                         ],
                                       ),
                                     ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Card(
+                            color:
+                                Theme.of(context).appBarTheme.foregroundColor,
+                            surfaceTintColor:
+                                Theme.of(context).colorScheme.secondary,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '${AppLocalizations.of(context)!.rawg}:',
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      final Uri url =
+                                          Uri.parse('https://rawg.io/');
+                                      if (await canLaunchUrl(url)) {
+                                        await launchUrl(url);
+                                      }
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.asset(
+                                        width: 310,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                        "assets/images/rawg_logo.png",
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),

@@ -10,5 +10,6 @@
   "search": "Buscar",
   "release_date": "Fecha de lanzamiento",
   "metacritic": "Nota en Metacritic",
-  "filter_by_rating": "Valoración"
+  "filter_by_rating": "Valoración",
+  "rawg": "Datos sacados de Rawg.io"
 }
