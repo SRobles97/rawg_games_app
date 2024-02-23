@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/videogame.dart';
+import '../screens/videogame_details.dart';
 
 class VideogameItem extends StatelessWidget {
   final Videogame videogame;
@@ -17,18 +18,21 @@ class VideogameItem extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
 
     Widget image() {
-      return videogame.imageUrl.isNotEmpty
-          ? FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: videogame.imageUrl,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: isGrid ? 200 : 100,
-            )
-          : Icon(
-              Platform.isIOS ? CupertinoIcons.photo : Icons.photo,
-              size: isGrid ? 200 : 100,
-            );
+      return Hero(
+        tag: videogame.id,
+        child: videogame.imageUrl.isNotEmpty
+            ? FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: videogame.imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: isGrid ? 200 : 100,
+              )
+            : Icon(
+                Platform.isIOS ? CupertinoIcons.photo : Icons.photo,
+                size: isGrid ? 200 : 100,
+              ),
+      );
     }
 
     Widget buildRowOfStars(double rating) {
@@ -40,6 +44,7 @@ class VideogameItem extends StatelessWidget {
                 color: Colors.amber,
                 size: 16,
               ));
+
       int fullStars = rating.floor();
       for (int i = 0; i < fullStars; i++) {
         stars[i] = const Icon(
@@ -71,103 +76,107 @@ class VideogameItem extends StatelessWidget {
       return Row(mainAxisSize: MainAxisSize.min, children: stars);
     }
 
-    return isGrid
-        ? ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Stack(
-              children: [
-                image(),
-                Positioned(
-                    top: 0,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => VideogameDetails(videogame: videogame)));
+      },
+      child: isGrid
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Stack(
+                children: [
+                  image(),
+                  Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        color: Colors.black.withOpacity(0.5),
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              videogame.rating.toString(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                              size: 16,
+                            ),
+                          ],
+                        ),
+                      )),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
                     right: 0,
                     child: Container(
                       color: Colors.black.withOpacity(0.5),
                       padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            videogame.rating.toString(),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                            size: 16,
-                          ),
-                        ],
-                      ),
-                    )),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    color: Colors.black.withOpacity(0.5),
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      videogame.title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                      child: Text(
+                        videogame.title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
+                ],
+              ),
+            )
+          : Card(
+              child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: width > 600 ? 400 : 200,
+                  height: width > 600 ? 300 : 200,
+                  child: image(),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        videogame.title,
+                        style: TextStyle(
+                          fontSize: width > 600 ? 23 : 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Release Date: ${videogame.releaseDate}',
+                        style: TextStyle(
+                          fontSize: width > 600 ? 18 : 14,
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            '${videogame.rating}',
+                            style: TextStyle(
+                              fontSize: width > 600 ? 18 : 14,
+                            ),
+                          ),
+                          buildRowOfStars(videogame.rating),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ],
-            ),
-          )
-        : Card(
-            child: Row(
-            children: <Widget>[
-              SizedBox(
-                width: width > 600 ? 400 : 150,
-                  height: width > 600 ? 300 : 200,
-                child: image(),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: width > 600
-                      ? CrossAxisAlignment.center
-                      : CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      videogame.title,
-                      style: TextStyle(
-                        fontSize: width > 600 ? 23 : 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Release Date: ${videogame.releaseDate}',
-                      style: TextStyle(
-                        fontSize: width > 600 ? 18 : 14,
-                      ),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          '${videogame.rating}',
-                          style: TextStyle(
-                            fontSize: width > 600 ? 18 : 14,
-                          ),
-                        ),
-                        buildRowOfStars(videogame.rating),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ));
+            )),
+    );
   }
 }

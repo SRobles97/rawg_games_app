@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:games_app/widgets/videogames_grid.dart';
 import 'package:games_app/widgets/videogames_list.dart';
 import '../providers/videogames_provider.dart';
-import '../widgets/videogame_item.dart';
 
 class VideogamesScreen extends ConsumerStatefulWidget {
   const VideogamesScreen({super.key});
