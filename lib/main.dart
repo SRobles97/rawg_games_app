@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:games_app/providers/videogames_provider.dart';
 import 'package:games_app/screens/index.dart';
+import 'package:games_app/screens/splash.dart';
+import 'package:games_app/screens/videogames.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,22 +13,37 @@ void main() async {
   runApp(const ProviderScope(child: GamesApp()));
 }
 
-class GamesApp extends StatelessWidget {
+class GamesApp extends ConsumerStatefulWidget {
   const GamesApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  ConsumerState<GamesApp> createState() => _GamesAppState();
+}
+
+class _GamesAppState extends ConsumerState<GamesApp> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+        () => ref.read(videogamesProvider.notifier).loadVideogames());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: MaterialApp(
-            title: 'Videogames Flutter App',
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
-            ),
-            home: const IndexScreen()));
+    return const MaterialApp(
+      title: 'Games App',
+      home: InitialScreen(),
+    );
+  }
+}
+
+class InitialScreen extends ConsumerWidget {
+  const InitialScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final videogames = ref.watch(videogamesProvider);
+
+    return videogames.isNotEmpty ? const IndexScreen() : const SplashScreen();
   }
 }

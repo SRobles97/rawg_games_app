@@ -15,7 +15,6 @@ class VideogamesScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<VideogamesScreen> {
-  late Future<void> _videogamesFuture;
   final _scrollController = ScrollController();
   bool _isGrid = true;
   bool _isAscending = true;
@@ -23,7 +22,6 @@ class _HomeScreenState extends ConsumerState<VideogamesScreen> {
   @override
   void initState() {
     super.initState();
-    _videogamesFuture = ref.read(videogamesProvider.notifier).loadVideogames();
     _scrollController.addListener(_onScroll);
   }
 
@@ -38,68 +36,59 @@ class _HomeScreenState extends ConsumerState<VideogamesScreen> {
   Widget build(BuildContext context) {
     final videogames = ref.watch(videogamesProvider);
     return Scaffold(
-      body: FutureBuilder(
-        future: _videogamesFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            return CustomScrollView(
-              slivers: <Widget>[
-                SliverToBoxAdapter(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isAscending = !_isAscending;
-                              ref
-                                  .read(videogamesProvider.notifier)
-                                  .filterByRating(_isAscending);
-                            });
-                          },
-                          icon: Icon(Platform.isAndroid
-                              ? _isAscending
-                                  ? Icons.arrow_upward
-                                  : Icons.arrow_downward
-                              : _isAscending
-                                  ? CupertinoIcons.arrow_up
-                                  : CupertinoIcons.arrow_down)),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _isGrid = !_isGrid;
-                          });
-                        },
-                        icon: Icon(
-                          _isGrid
-                              ? Platform.isIOS
-                                  ? CupertinoIcons.square_list
-                                  : Icons.list
-                              : Platform.isIOS
-                                  ? CupertinoIcons.square_grid_2x2
-                                  : Icons.grid_view,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ],
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _isAscending = !_isAscending;
+                        ref
+                            .read(videogamesProvider.notifier)
+                            .filterByRating(_isAscending);
+                      });
+                    },
+                    icon: Icon(Platform.isAndroid
+                        ? _isAscending
+                            ? Icons.arrow_upward
+                            : Icons.arrow_downward
+                        : _isAscending
+                            ? CupertinoIcons.arrow_up
+                            : CupertinoIcons.arrow_down)),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isGrid = !_isGrid;
+                    });
+                  },
+                  icon: Icon(
+                    _isGrid
+                        ? Platform.isIOS
+                            ? CupertinoIcons.square_list
+                            : Icons.list
+                        : Platform.isIOS
+                            ? CupertinoIcons.square_grid_2x2
+                            : Icons.grid_view,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-                SliverFillRemaining(
-                    child: _isGrid
-                        ? VideogameGrid(
-                            videogames: videogames,
-                            scrollController: _scrollController,
-                          )
-                        : VideogameList(
-                            videogames: videogames,
-                            scrollController: _scrollController)),
               ],
-            );
-          }
-        },
+            ),
+          ),
+          SliverFillRemaining(
+              child: _isGrid
+                  ? VideogameGrid(
+                      videogames: videogames,
+                      scrollController: _scrollController,
+                    )
+                  : VideogameList(
+                      videogames: videogames,
+                      scrollController: _scrollController)),
+        ],
       ),
     );
   }
