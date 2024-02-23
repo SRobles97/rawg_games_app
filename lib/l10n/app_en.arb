@@ -1,0 +1,14 @@
+{
+  "language": "English",
+  "@language": {
+    "description": "The current language of the application"
+  },
+  "title": "Rawg.io List of Games",
+  "top_rated": "Top 5 best rated",
+  "top_metacritic": "Top 5 best rated on Metacritic",
+  "most_recent": "5 Most recent games",
+  "search": "Search",
+  "home": "Home",
+  "games": "Videogames",
+  "favorites": "Favorites"
+}

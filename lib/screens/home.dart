@@ -10,6 +10,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(8),
         child: Column(
           children: [
             TopRatedWidget(),

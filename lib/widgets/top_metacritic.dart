@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:games_app/widgets/metascore.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -19,15 +20,12 @@ class TopMetacriticWidget extends ConsumerWidget {
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Top 5 best Metacritic scores',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(AppLocalizations.of(context)!.top_metacritic,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        )),
               ),
               SizedBox(
                 height: 200,
@@ -69,15 +67,26 @@ class TopMetacriticWidget extends ConsumerWidget {
                               right: 0,
                               child: Container(
                                 padding: const EdgeInsets.all(8),
-                                color: Colors.black54,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .background
+                                      .withOpacity(0.5),
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                ),
                                 child: Text(
                                   game.title,
                                   maxLines: 1,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyMedium!
+                                      .bodySmall!
                                       .copyWith(
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .appBarTheme
+                                            .foregroundColor,
                                       ),
                                   textAlign: TextAlign.center,
                                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:games_app/screens/videogame_details.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -17,16 +18,14 @@ class TopRatedWidget extends ConsumerWidget {
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Top 5 Rated Games',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(AppLocalizations.of(context)!.top_rated,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        )),
               ),
+              const SizedBox(height: 8),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -53,7 +52,9 @@ class TopRatedWidget extends ConsumerWidget {
                             ),
                             subtitle: Row(
                               children: [
-                                Text(game.rating.toString()),
+                                Text(game.rating.toString(),
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall!),
                                 const Icon(
                                   Icons.star,
                                   color: Colors.amber,

@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:games_app/screens/home.dart';
 import 'package:games_app/screens/videogames.dart';
 
@@ -25,7 +28,7 @@ class _IndexScreenState extends State<IndexScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('RAWG.IO Videogame List'),
+          title: Text(AppLocalizations.of(context)!.title),
           actions: [
             IconButton(
               onPressed: null, // TODO: Implement search
@@ -43,19 +46,22 @@ class _IndexScreenState extends State<IndexScreen> {
           },
           selectedFontSize: 12,
           unselectedFontSize: 10,
+          unselectedItemColor: Theme.of(context).colorScheme.tertiary,
+          selectedItemColor: Theme.of(context).appBarTheme.backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.onPrimary,
           currentIndex: _selectedIndex,
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
+              icon: const Icon(Icons.home),
+              label: AppLocalizations.of(context)!.home,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.videogame_asset),
-              label: 'Videogames',
+              icon: const Icon(Icons.videogame_asset),
+              label: AppLocalizations.of(context)!.games,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border),
-              label: 'Favorites',
+              icon: const Icon(Icons.favorite_border),
+              label: AppLocalizations.of(context)!.favorites,
             ),
           ],
         ));

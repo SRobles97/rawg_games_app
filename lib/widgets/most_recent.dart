@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../providers/videogames_provider.dart';
@@ -10,7 +11,7 @@ class MostRecentWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String _extractYear(String releaseDate) {
+    String extractYear(String releaseDate) {
       final regex = RegExp(r'^\d{4}-\d{2}-\d{2}$'); // 2021-10-08 for example
       final match = regex.firstMatch(releaseDate);
       if (match != null) {
@@ -26,14 +27,13 @@ class MostRecentWidget extends ConsumerWidget {
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'Most Recent Games',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  AppLocalizations.of(context)!.most_recent,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                 ),
               ),
               SizedBox(
@@ -70,13 +70,15 @@ class MostRecentWidget extends ConsumerWidget {
                               right: 0,
                               child: Container(
                                 padding: const EdgeInsets.all(8),
-                                color: Colors.blue.shade600,
+                                color: Theme.of(context)
+                                    .appBarTheme
+                                    .backgroundColor,
                                 child: Text(
                                   game.title,
                                   maxLines: 1,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyMedium!
+                                      .bodySmall!
                                       .copyWith(
                                         color: Colors.white,
                                       ),
@@ -89,9 +91,9 @@ class MostRecentWidget extends ConsumerWidget {
                                 right: 0,
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
-                                  color: Colors.blue,
+                                  color: Theme.of(context).colorScheme.background,
                                   child: Text(
-                                    _extractYear(game.releaseDate),
+                                    extractYear(game.releaseDate),
                                     maxLines: 1,
                                     style: Theme.of(context)
                                         .textTheme
