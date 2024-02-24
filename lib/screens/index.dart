@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:games_app/screens/favorites.dart';
 
 import 'package:games_app/screens/home.dart';
 import 'package:games_app/screens/videogames.dart';
@@ -21,7 +22,7 @@ class _IndexScreenState extends State<IndexScreen> {
   final _pages = [
     const HomeScreen(),
     const VideogamesScreen(),
-    const Text('Profile'),
+    const FavoritesScreen()
   ];
 
   @override

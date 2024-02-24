@@ -2,23 +2,36 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:games_app/screens/image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:games_app/widgets/metascore.dart';
 
 import 'package:games_app/widgets/stars_row.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/videogame.dart';
+import '../providers/favorites_provider.dart';
 
-class VideogameDetails extends StatelessWidget {
+class VideogameDetails extends ConsumerWidget {
   final Videogame videogame;
 
   const VideogameDetails({super.key, required this.videogame});
 
+  void _showInfoMessage(String message, BuildContext context) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2, milliseconds: 500),
+      ),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteVideogame = ref.watch(favoritesVideogamesProvider);
+    final isFavorite = favoriteVideogame.contains(videogame);
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -28,12 +41,7 @@ class VideogameDetails extends StatelessWidget {
             right: 0,
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ImageScreen(
-                    imageUrl: videogame.imageUrl,
-                    videogameId: videogame.id,
-                  ),
-                ));
+                Navigator.of(context).pop();
               },
               child: Hero(
                   tag: videogame.id,
@@ -51,17 +59,44 @@ class VideogameDetails extends StatelessWidget {
             right: 0,
             child: AppBar(
               iconTheme:
-                  IconThemeData(color: Theme.of(context).colorScheme.secondary),
+                  IconThemeData(color: Theme.of(context).appBarTheme.backgroundColor),
               backgroundColor: Colors.transparent,
               elevation: 0,
               actions: [
                 IconButton(
-                  icon: Icon(
-                    Platform.isIOS
-                        ? CupertinoIcons.heart
-                        : Icons.favorite_border,
+                  icon: AnimatedSwitcher(
+                    transitionBuilder: (child, animation) => ScaleTransition(
+                      scale: Tween<double>(begin: 0.2, end: 1.0)
+                          .animate(animation),
+                      child: child,
+                    ),
+                    duration: const Duration(milliseconds: 300),
+                    child: Icon(
+                      isFavorite
+                          ? Platform.isIOS
+                              ? CupertinoIcons.heart_fill
+                              : Icons.favorite
+                          : Platform.isIOS
+                              ? CupertinoIcons.heart
+                              : Icons.favorite_border,
+                      key: ValueKey(isFavorite),
+                    ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    final wasAdded = ref
+                        .read(favoritesVideogamesProvider.notifier)
+                        .toggleMealFavoriteStatus(videogame);
+
+                    if (wasAdded) {
+                      _showInfoMessage(
+                          AppLocalizations.of(context)!.added_to_favorites,
+                          context);
+                    } else {
+                      _showInfoMessage(
+                          AppLocalizations.of(context)!.removed_from_favorites,
+                          context);
+                    }
+                  },
                 ),
               ],
             ),

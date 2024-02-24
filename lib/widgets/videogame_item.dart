@@ -120,23 +120,12 @@ class VideogameItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Release Date: ${videogame.releaseDate}',
+                        videogame.releaseDate,
                         style: TextStyle(
-                          fontSize: width > 600 ? 18 : 14,
+                          fontSize: width > 600 ? 18 : 12,
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            '${videogame.rating}',
-                            style: TextStyle(
-                              fontSize: width > 600 ? 18 : 14,
-                            ),
-                          ),
-                          StarsRowWidget(rating: videogame.rating),
-                        ],
-                      )
+                      StarsRowWidget(rating: videogame.rating),
                     ],
                   ),
                 ),

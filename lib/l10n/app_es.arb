@@ -8,8 +8,14 @@
   "games": "Juegos",
   "favorites": "Favoritos",
   "search": "Buscar",
-  "release_date": "Fecha de lanzamiento",
+  "release_date": "Lanzado el",
   "metacritic": "Nota en Metacritic",
   "filter_by_rating": "Valoración",
-  "rawg": "Datos sacados de Rawg.io"
+  "rawg": "Datos sacados de Rawg.io",
+  "added_to_favorites": "Añadido a favoritos",
+  "removed_from_favorites": "Eliminado de favoritos",
+  "no_favorites": "No hay juegos en favoritos",
+  "my_favorites": "Mis favoritos",
+  "no_results": "No hay resultados",
+  "search_placeholder": "Buscar juegos"
 }

@@ -5,12 +5,12 @@ import '../models/videogame.dart';
 
 class VideogameGrid extends StatelessWidget {
   final List<Videogame> videogames;
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
   const VideogameGrid({
     super.key,
     required this.videogames,
-    required this.scrollController,
+    this.scrollController,
   });
 
   @override
