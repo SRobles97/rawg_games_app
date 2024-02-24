@@ -4,19 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:games_app/providers/videogames_provider.dart';
 import 'package:games_app/screens/favorites.dart';
 
 import 'package:games_app/screens/home.dart';
+import 'package:games_app/screens/search.dart';
 import 'package:games_app/screens/videogames.dart';
 
-class IndexScreen extends StatefulWidget {
+class IndexScreen extends ConsumerStatefulWidget {
   const IndexScreen({super.key});
 
   @override
-  State<IndexScreen> createState() => _IndexScreenState();
+  ConsumerState<IndexScreen> createState() => _IndexScreenState();
 }
 
-class _IndexScreenState extends State<IndexScreen> {
+class _IndexScreenState extends ConsumerState<IndexScreen> {
   int _selectedIndex = 0;
 
   final _pages = [
@@ -27,12 +30,21 @@ class _IndexScreenState extends State<IndexScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final videogames = ref.watch(videogamesProvider.notifier).allVideogames;
+
     return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.title),
           actions: [
             IconButton(
-              onPressed: null, // TODO: Implement search
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: SearchScreen(
+                    videogames: videogames,
+                  ),
+                );
+              },
               icon: Icon(
                   Platform.isAndroid ? Icons.search : CupertinoIcons.search),
             ),

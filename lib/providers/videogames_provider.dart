@@ -56,19 +56,16 @@ class VideogamesNotifier extends StateNotifier<List<Videogame>> {
   }
 
   void _updateSpecialLists() {
-    // Actualizar los 5 juegos mejor valorados por rating
     _topRatedGames = [..._allVideogames]
       ..sort((a, b) => b.rating.compareTo(a.rating));
     _topRatedGames = _topRatedGames.take(5).toList();
 
-    // Actualizar los 5 juegos mejor valorados por metacritic
     var metacriticGames = _allVideogames
         .where((game) => game.metacritic > 0)
         .toList()
       ..sort((a, b) => b.metacritic.compareTo(a.metacritic));
     _topMetacriticGames = metacriticGames.take(5).toList();
 
-    // Actualizar los juegos más recientes por fecha de lanzamiento
     _recentGames = [..._allVideogames]
       ..sort((a, b) => b.releaseDate.compareTo(a.releaseDate));
     _recentGames = _recentGames.take(5).toList();
@@ -88,12 +85,6 @@ class VideogamesNotifier extends StateNotifier<List<Videogame>> {
         ? a.metacritic.compareTo(b.metacritic)
         : b.metacritic.compareTo(a.metacritic));
     state = sortedVideogames;
-  }
-
-  Future<void> refreshVideogames() async {
-    _currentPage = 1;
-    _allVideogames = []; // Resetear la lista completa de videojuegos
-    await loadVideogames();
   }
 }
 
